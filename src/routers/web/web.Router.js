@@ -40,7 +40,6 @@ res.render('login.handlebars', { pageTitle: 'Login' })
 })
 
 webRouter.get('/profile', onlyLogueadosWeb, (req, res) => {
-  console.log('logeado web profile')
     res.render('profile.handlebars', {
       pageTitle: 'Perfil',
       ...req.user

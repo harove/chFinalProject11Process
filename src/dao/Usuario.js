@@ -1,58 +1,56 @@
-import mongoose from "mongoose"
+import mongoose, {Schema} from "mongoose"
 import { randomUUID } from "node:crypto"
-import { hasheadasSonIguales } from '../utils/criptografia.js'
+import { hasheadasSonIguales, hashear } from '../utils/criptografia.js'
+import { DEFAULT_USER_AVATAR_PATH } from "../config.js"
+
 
 const collection = 'usuarios'
 
-const schema = new mongoose.Schema({
-  _id: { type: String, default: randomUUID },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  nombre: { type: String, required: true },
-  apellido: { type: String, required: false }, // En github puede no venir
+const schema = new Schema({
+    _id: {type: String, default: randomUUID},
+    first_name: {type: String, required: true},
+    last_name: {type: String, required: true},
+    email: { type: String, required: true},
+    password: {type: String, required: true},
+    // foto: { type: String, default: DEFAULT_USER_AVATAR_PATH},
+    rol: {type: String, enum:['admin', 'user'], default: 'user'}
 }, {
-  strict: 'throw',
-  versionKey: false,
-  statics: {
-    login: async function (email, password) {
-      let datosUsuario
+    versionKey: false,
+    strict: 'throw',
+    statics: {
+        registrar: async function (userData) {
+            try {
+                if(userData.password){
+                    userData.password = hashear(userData.password)
+                }
+                userData.rol = 'user'
+                const user = await this.create(userData)
+                return user.toObject()
+            } catch(error){
+                const typedError = new Error(error.message)
+                typedError['type'] = 'INVALID_ARGUMENT'
+                throw typedError
+            }  
+        },
 
-      if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-        datosUsuario = {
-          email: 'admin',
-          nombre: 'admin',
-          apellido: 'admin',
-          rol: 'admin'
+        autenticar: async function (email, password){
+            const user = await this.findOne({email})
+            if (!user){
+                const typedError = new Error('error de authenticación')
+                typedError['type'] = 'FAILED AUTHENTICATION'
+                throw typedError
+            }
+            if(!hasheadasSonIguales(password, user.password)){
+                const typedError = new Error('error de authenticación')
+                typedError['type'] = 'FAILED AUTHENTICATION'
+                throw typedError
+            }
+            return user.toObject()
         }
-      } else {
-        const usuario = await mongoose.model(collection).findOne({ email }).lean()
+        
 
-        if (!usuario) {
-          throw new Error('login failed')
-        }
-
-        if (!hasheadasSonIguales(password, usuario['password'])) {
-          throw new Error('login failed because hashed are not equals')
-        }
-
-        datosUsuario = {
-          email: usuario['email'],
-          nombre: usuario['nombre'],
-          apellido: usuario['apellido'],
-          rol: 'usuario'
-        }
-      }
-      return datosUsuario
     }
-  }
-})
 
-//Con esto eliminamos el password para que no se vea
-//cuando se hace toObject
-schema.options.toObject ={
-  transform: function (doc, ret){
-    delete ret.password
-  }
-}
+})
 
 export const manager = mongoose.model(collection, schema)

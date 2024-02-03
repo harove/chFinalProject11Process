@@ -9,7 +9,8 @@ import { productsManager, messagesManager } from './dao/index.js'
 import session from 'express-session'
 import { MONGODB_CNX_STR, SESSION_SECRET } from './config.js'
 import { sesiones } from './middlewares/sesiones.js'
-import { passportInitialize, passportSession } from './middlewares/autenticaciones.js'
+import { passportInitialize } from './middlewares/autenticaciones.js'
+import { cookies } from './middlewares/cookies.js'
 
 // import {  } from './midlewares/midlewares.js'
 
@@ -28,11 +29,12 @@ app.set('views', './views')
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+app.use(cookies)
 app.use(express.static('./public'))
 app.use(express.static('./views'))
 app.use('/static', express.static('./static'))
 app.use(sesiones)
-app.use(passportInitialize, passportSession)
+app.use(passportInitialize)
 
 //Para saber en que puerto esta funcionando.
 const server = app.listen(8080, ()=> {console.log('Server ON: 8080')})
@@ -67,8 +69,6 @@ webSocketServer.on('connection', async (socket) => {
     socket.emit('mensajes', await messagesManager.find().lean())
 
     socket.on('mensaje', async mensaje => {
-        console.log({mensaje, usuario:socket.handshake.auth.username})
-
     try {
         await messagesManager.create({ 
             user: socket.handshake.auth.username, 
