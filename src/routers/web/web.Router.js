@@ -3,13 +3,11 @@ import { Router } from 'express';
 import { productsManager as manager } from '../../dao/index.js';
 import { cartsWebRouter } from './carts.web.router.js';
 import { onlyLogueadosWeb } from '../../middlewares/autorizacion.js';
-import { sesionesRouter } from './sesiones.router.js';
 import { productsRouter } from './products.router.js';
 import passport from 'passport';
 
 export const webRouter = Router();
 
-webRouter.use(sesionesRouter)
 webRouter.use(productsRouter)
 
 
