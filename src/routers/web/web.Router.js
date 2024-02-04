@@ -5,6 +5,7 @@ import { cartsWebRouter } from './carts.web.router.js';
 import { onlyLogueadosWeb } from '../../middlewares/autorizacion.js';
 import { sesionesRouter } from './sesiones.router.js';
 import { productsRouter } from './products.router.js';
+import passport from 'passport';
 
 export const webRouter = Router();
 
@@ -39,9 +40,15 @@ webRouter.get('/login', (req, res) => {
 res.render('login.handlebars', { pageTitle: 'Login' })
 })
 
-webRouter.get('/profile', onlyLogueadosWeb, (req, res) => {
-    res.render('profile.handlebars', {
-      pageTitle: 'Perfil',
-      ...req.user
-    })
+webRouter.get('/githublogin', passport.authenticate('loginGithub'))
+
+webRouter.get('/githubcallback', passport.authenticate('loginGithub', {
+  successRedirect: '/profile',
+  failureRedirect: '/login'
+}))
+
+webRouter.get('/profile', (req, res) => {
+  res.render('profile.handlebars', {
+    pageTitle: 'Perfil',
   })
+})

@@ -7,10 +7,10 @@ const store = connectMongo.create({
   ttl: 60 * 60 * 24 // 1d
 })
 
-export const sesiones = session({
-  store,
-  secret: SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false
-})
+// export const sesiones = session({
+//   store,
+//   secret: SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: false
+// })
 

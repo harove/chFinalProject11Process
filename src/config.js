@@ -11,7 +11,7 @@ export const COOKIE_SECRET = "cookieSecret"
 export const COOKIE_OPTIONS = {
     httpOnly: true,
     maxAge: 1000*60*60*24,
-    signed: true
+    signed: true,
 }
 export const JWT_PRIVATE_KEY = 'jwtSecret'
 export const DEFAULT_USER_AVATAR_PATH = './static/imgs/default-user.webp'

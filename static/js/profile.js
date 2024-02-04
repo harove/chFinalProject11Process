@@ -8,6 +8,9 @@ formLogout?.addEventListener('submit', async event => {
     method: 'DELETE'
   })
 
+  document.cookie = 'authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost; Secure; SameSite=None;';
+
+
   if (response.status === 204) {
     window.location.href = '/login'
   } else {
@@ -20,16 +23,16 @@ formLogout?.addEventListener('submit', async event => {
 window.addEventListener('load', async ()=>{
   const response = await fetch('/api/usuarios/current')
 
-  if (response.status === 403) {
+  if (response.status === 401) {
     alert('necesitas loguearte para ver esta info!')
     return (window.location.href = '/login')
   }
 
   const result = await response.json()
-  const usuario = result.payload
+  const usuario = result
 
-  spans[0].innerHTML = usuario.nombre
-  spans[1].innerHTML = usuario.apellido
+  spans[0].innerHTML = usuario.first_name
+  spans[1].innerHTML = usuario.last_name
   spans[2].innerHTML = usuario.email
 
 })

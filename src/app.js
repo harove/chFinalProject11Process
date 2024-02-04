@@ -8,7 +8,7 @@ import connectMongo from 'connect-mongo'
 import { productsManager, messagesManager } from './dao/index.js'
 import session from 'express-session'
 import { MONGODB_CNX_STR, SESSION_SECRET } from './config.js'
-import { sesiones } from './middlewares/sesiones.js'
+// import { sesiones } from './middlewares/sesiones.js'
 import { passportInitialize } from './middlewares/autenticaciones.js'
 import { cookies } from './middlewares/cookies.js'
 
@@ -21,6 +21,9 @@ const store = connectMongo.create({
 
 const app = express()
 
+
+app.use(cookies)
+app.use(passportInitialize)
 //motor de plantillas
 app.engine('handlebars', handlebars.engine())
 app.set('views', './views')
@@ -29,12 +32,13 @@ app.set('views', './views')
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
-app.use(cookies)
+
+
 app.use(express.static('./public'))
 app.use(express.static('./views'))
 app.use('/static', express.static('./static'))
-app.use(sesiones)
-app.use(passportInitialize)
+// app.use(sesiones)
+
 
 //Para saber en que puerto esta funcionando.
 const server = app.listen(8080, ()=> {console.log('Server ON: 8080')})

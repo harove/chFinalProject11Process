@@ -26,6 +26,15 @@ export const sesionesRouter = Router()
 //   })
 // })
 
+
+
+sesionesRouter.delete('/current',
+    deleteTokenFromCookie,
+    (req, res, next)=>{
+        res.status(204).end()
+    }
+)
+
 sesionesRouter.post('/', 
     async (req, res, next)=>{
         try {
@@ -39,12 +48,5 @@ sesionesRouter.post('/',
     tokenizeUserInCookie,
     (req, res)=>{
         res.status(201).json(req.user)
-    }
-)
-
-sesionesRouter.delete('/current',
-    deleteTokenFromCookie,
-    (req, res, next)=>{
-        res.sendStatus(204)
     }
 )
