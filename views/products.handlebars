@@ -1,0 +1,22 @@
+<div class="container">
+    <h1 class="row justify-content-center">{{titulo}}</h1>
+    <div class="products-page"></div>
+
+
+    <div class="row pagination justify-content-center"> 
+        <div class="col-auto">
+            <span>
+                <a id="prevLink" class="text-decoration-none"> &#60; </a>
+            </span>
+            <span>
+                page <a id="page" class="text-decoration-none" href="/products?page=page">page</a></span> from  
+                <a id="totalPages" class="class=text-decoration-none" href="/products?page=totalPages">totalPages</a>
+            </span>
+            <span>
+                <a id="nextLink" class="text-decoration-none"> &#62; </a>
+            </span>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/products.js"></script>
+</div>

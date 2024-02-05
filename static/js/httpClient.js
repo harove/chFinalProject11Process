@@ -1,6 +1,6 @@
 // httpClient.js
 
-export const httpClient = (url, method) => fetch(url, {
+export const httpClient = (url, method='get') => fetch(url, {
     method,
     headers: {
         'Content-Type': 'application/json',

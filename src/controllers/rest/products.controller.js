@@ -28,8 +28,8 @@ export async function getController(req, res) {
             status: 'success',
             payload,
             ...rest,
-            prevLink: rest.hasPrevPage ? `/api/products?page=${rest.prevPage}&limit=${rest.limit}` : null,
-            nextLink: rest.hasNextPage ? `/api/products?page=${rest.nextPage}&limit=${rest.limit}` : null,
+            prevLink: rest.hasPrevPage ? `/products?page=${rest.page-1}&limit=${rest.limit}` : null,
+            nextLink: rest.hasNextPage ? `/products?page=${rest.page+1}&limit=${rest.limit}` : null,
         }
         res.status(200).json(response)
     } catch (error) {
