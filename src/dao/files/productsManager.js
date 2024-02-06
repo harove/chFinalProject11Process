@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import { randomUUID } from 'node:crypto'
-import { Product } from './models/Product.js'
+import { Product } from '../models/Product.js'
 export let id = 0
 
 export class ProductsManager{

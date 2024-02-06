@@ -1,8 +1,7 @@
 import { httpClient } from './httpClient.js';
 // Retrieve the payload data from the data attribute
 
-const productsPage = document.querySelector('.products-page')
-const productListEl = document.createElement('div');
+const productListEl = document.getElementById('productListEl');
 const prevLinkEl = document.getElementById('prevLink');
 const nextLinkEl = document.getElementById('nextLink');
 productListEl.classList.add('product-list');
@@ -25,23 +24,42 @@ const renderAgain = (response)=>{
     totalPagesLinkEl.href=`/products?page=${response.totalPages}`
     totalPagesLinkEl.innerHTML=response.totalPages
 
+    const productDiv = document.createElement('div');
+    productDiv.classList.add('product');
+
+    console.log(Object.entries(response.payload[0]))
+
+    Object.entries(response.payload[0]).forEach(([key,val])=>{
+        const paragraph = document.createElement('p');
+        paragraph.classList.add('product__item');
+        paragraph.classList.add('col');
+        paragraph.textContent = `${key}`;
+        productDiv.appendChild(paragraph);
+    })
+    productListEl.appendChild(productDiv);
+
+
     response.payload.forEach(product => {
-        let li = null
-        const ul = document.createElement('ul');
-        ul.classList.add('product');
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
     
         Object.entries(product).forEach(([key,val])=>{
             const paragraph = document.createElement('p');
             paragraph.classList.add('product__item');
+            paragraph.classList.add('col');
             paragraph.textContent = `${val}`;
-            li = document.createElement('li');
-            li.appendChild(paragraph);
-            ul.appendChild(li)
+            productDiv.appendChild(paragraph);
         })
-        productListEl.appendChild(ul);
+
+        const paragraph = document.createElement('p');
+        paragraph.classList.add('product__item');
+        paragraph.classList.add('col');
+        paragraph.innerHTML = `<a href="/products/${product._id}">View</a>`;
+        productDiv.appendChild(paragraph);
+
+        productListEl.appendChild(productDiv);
     });
     
-    productsPage.appendChild(productListEl)
 }
 
 

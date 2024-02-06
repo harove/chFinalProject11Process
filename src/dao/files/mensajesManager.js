@@ -1,5 +1,5 @@
 import fs from 'fs/promises'
-import {Mensaje} from './models/Mensaje.js'
+import {Mensaje} from '../models/Mensaje.js'
 
 class MensajesManager{
     #route
